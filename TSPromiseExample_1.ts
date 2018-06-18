@@ -12,12 +12,19 @@ namespace TSPromiseExample_1 {
 
     var upload, compress, transfer;
 
+    //Promise Chaining for concurrent step-wise computation
     Promise.all([
         performUpload('uploading...'),
-        performUpload('compressing...'),
-        performUpload('transferring...'),
-        performUpload('completed')
+        performUpload('compressing...'),        
     ]).then(values => {
-        console.log(values);
+        Promise.all([
+            performUpload('transferring...')
+        ]).then(values => {
+            Promise.all([
+                performUpload('completed')
+            ]).then(values => {
+                console.log(values);
+            })
+        });
     });
 }
